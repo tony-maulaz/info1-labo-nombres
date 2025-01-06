@@ -39,6 +39,7 @@ Le programme doit être exécutable de la manière suivante :
 - Si aucun nombre n'est fourni, le programme quitte avec un code d'erreur `4`.
 - Si deux virgules se suivent dans la liste de nombres, le programme quitte avec un code d'erreur `3`.
 - Si autre chose qu'un nombre ou une virgule est fourni, le programme quitte avec un code d'erreur `1`.
+- Le programme doit être robuste aux erreurs de saisie.
 
 ## Bonnes pratiques de développement :
 - Développer des fonctions booléennes pour vérifier la présence des options :
