@@ -24,7 +24,7 @@ Le programme doit être exécutable de la manière suivante :
   ...
   ```
 - `-o` : Affiche les nombres triés par ordre décroissant.
-- `-v` : Affiche un message avec la version du programme et quitte. Cette option a la plus haute priorité.
+- `-v ou --version` : Affiche un message avec la version du programme et quitte. Cette option a la plus haute priorité.
 
 ### Utilisation des options :
 - Les options peuvent être utilisées ensemble dans n'importe quel ordre.
@@ -33,7 +33,8 @@ Le programme doit être exécutable de la manière suivante :
   - `./app 12,23 -n -o`
   - `./app -o 12,23 -n`
   - `./app -o 12,23 -n --version`
-  - 
+  - `./app -v`
+  
 ## Comportements supplémentaires :
 - Si aucun nombre n'est fourni, le programme quitte avec un code d'erreur `4`.
 - Si deux virgules se suivent dans la liste de nombres, le programme quitte avec un code d'erreur `3`.
