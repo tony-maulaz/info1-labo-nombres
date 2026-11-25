@@ -32,14 +32,14 @@ clean:
 	$(RM) $(EXEC)
 	$(RM) -rf $(ODIR)
 
+# Le résultat des tests est déjà affiché : on ne veut pas en plus le message
+# d'erreur de make quand un test échoue.
 test: $(EXEC)
-	baygon -v -t test.json ./$(EXEC)
-
-testf: $(EXEC)
-	baygon -v -t testf.json ./$(EXEC)
+	@python3 -m pytest --version >/dev/null 2>&1 || { echo "pytest n'est pas installé : pip3 install pytest --break-system-packages"; exit 1; }
+	@python3 -m pytest || true
 
 format: main.c
 	clang-format -i main.c
 
-.PHONY:	clean all test
+.PHONY:	clean all test format
 .DEFAULT: all

@@ -99,3 +99,58 @@ void extract_numbers(char str[], int tab[]){
     }
 }
 ```
+
+## Tests :
+Des tests automatiques sont fournis pour contrôler votre programme. Chaque test lance `./app` avec des arguments, puis contrôle ce qu'il affiche et son code de retour.
+
+Pour compiler le programme et lancer les tests :
+
+```console
+make test
+```
+
+Chaque ligne correspond à un test : `OK` s'il est réussi, `ÉCHEC` sinon, avec la commande qui a été lancée.
+
+```console
+Tests du programme ./app (14 tests)
+──────────────────────────────────────────────────────────────────────────────
+  OK     affiche un nombre par ligne              ./app 12,23,45,1
+  OK     option -n : numéro devant chaque nombre  ./app -n 12,23,45,1
+  ÉCHEC  option -o : ordre décroissant            ./app -o 12,23,4
+  ...
+```
+
+Pour les premiers tests en échec, le détail montre ce qui était attendu et ce que votre programme a fait :
+
+```console
+ÉCHEC : option -o : ordre décroissant
+Commande : ./app -o 12,23,4
+
+Affichage attendu :
+    23
+    12
+    4
+Affichage de votre programme :
+    12
+    23
+    4
+La première différence est à la ligne 1.
+```
+
+Pour rejouer un test à la main, copiez sa commande dans le terminal. La commande `echo $?` affiche ensuite le code de retour :
+
+```console
+./app 1,,2
+echo $?
+1
+```
+
+Si `make test` indique que pytest n'est pas installé :
+
+```console
+pip3 install pytest --break-system-packages
+```
+
+Les tests ne contrôlent pas tout le cahier des charges : un programme qui réussit tous les tests peut encore contenir des erreurs.
+
+Ne modifiez pas les fichiers du dossier `tests/`.
