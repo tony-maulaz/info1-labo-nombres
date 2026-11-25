@@ -2,3 +2,6 @@ app
 obj/
 __pycache__/
 .pytest_cache/
+report.xml
+build.log
+results.json

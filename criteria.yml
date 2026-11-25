@@ -1,0 +1,130 @@
+# Critères d'évaluation du laboratoire « nombres » (schéma 3, plateforme Quiz).
+#
+# Une feuille avec `command` est automatique : la commande (argv, sans shell)
+# affiche `n/m` sur sa dernière ligne, sinon son code de sortie décide
+# (0 → 1/1). Les points valent max × n/m, une pénalité max × (1 − n/m). Une
+# feuille avec `prompt` est proposée par l'IA à partir des sources, puis
+# validée par l'enseignant.
+---
+schema_version: 3
+
+grading:
+  context: |
+    Tu es un correcteur impartial et bienveillant d'un cours d'introduction
+    à la programmation en C, en première année de Bachelor à la HEIG-VD. Tu
+    évalues uniquement à partir des preuves présentes dans les sources. En
+    cas de doute légitime, accorde le bénéfice du doute. Justifie chaque
+    point attribué ou retiré en une ou deux phrases, en français, adressées
+    à l'étudiant (vouvoiement), de façon factuelle : ce qui est constaté, ce
+    qui était attendu.
+
+    Le cahier des charges est README.md : c'est lui qui fait foi. Le
+    comportement du programme est déjà noté par les tests fonctionnels
+    (tests/test_cli.py) et la compilation par la CI : ne pénalise pas une
+    seconde fois un comportement qu'un test sanctionne, juge ici la
+    conception et la lisibilité du code de main.c.
+
+    Aucun style n'est prescrit (accolades, camelCase ou snake_case, français
+    ou anglais) : ce qui compte est que l'étudiant applique le même style
+    partout. Les noms des fonctions imposées par README.md
+    (option_linenumber_present, option_version_present,
+    option_order_present) sont en snake_case et en anglais : ne compte pas
+    cela comme un mélange de conventions. Le code d'aide de README.md
+    (extract_numbers) peut être repris et adapté. Aucun algorithme de tri
+    n'est imposé pour l'option -o, et les fonctions de la bibliothèque
+    standard (strcmp, strlen…) sont permises.
+  student:
+    level: 1ère année Bachelor, HEIG-VD, filière Microtechniques
+    knows:
+      - variables, types, opérateurs, conditions et boucles
+      - printf, scanf, make et gcc
+      - écriture de fonctions avec paramètres et valeur de retour
+      - argc / argv et les codes de retour
+    learning:
+      - parcours des arguments avec une boucle, options dans un ordre libre
+      - tableaux et chaînes de caractères parcourues caractère par caractère
+      - découpage d'un programme en fonctions
+  sources:
+    - README.md
+    - main.c
+    - Makefile
+    - tests/test_cli.py
+
+criteria:
+  tests:
+    description: Comportement du programme
+    functional:
+      description: Les tests fonctionnels de tests/test_cli.py passent (affichage, options, version, erreurs)
+      max_points: 10
+      command: [make, -s, points]
+  build:
+    description: Compilation
+    errors:
+      description: Le programme compile avec -std=c99 -Wall
+      max_points: 2
+      command: [make, -s, build]
+    warnings:
+      description: Le programme compile sans avertissement
+      max_points: -2
+      command: [make, -s, warnings]
+  code:
+    description: Qualité du code source (main.c)
+    options:
+      description: Les trois fonctions booléennes imposées vérifient la présence des options
+      max_points: 2
+      prompt: >
+        README.md impose option_linenumber_present, option_version_present
+        et option_order_present, qui reçoivent (int argc, char* argv[]) et
+        retournent un bool. Accorde 2 si les trois fonctions existent avec
+        ce prototype, cherchent l'option avec une boucle sur tous les
+        arguments (sans dépendre de sa position) et sont bien celles que le
+        programme appelle pour décider de son comportement. Accorde 1 si
+        elles existent mais qu'un point manque : prototype différent (sans
+        paramètre avec des variables globales, retour int), une fonction
+        absente, ou des fonctions écrites mais pas utilisées. Accorde 0 s'il
+        n'y a pas de fonction pour les options et que tout est testé dans
+        main.
+    structure:
+      description: Le programme est découpé en fonctions et main reste simple
+      max_points: 1
+      prompt: >
+        Accorde 1 si, en plus des fonctions des options, les parties du
+        programme sont dans des fonctions séparées (par exemple extraire les
+        nombres de la chaîne, afficher les nombres) et si main se lit comme
+        un enchaînement d'appels. Accorde 0.5 si une seule de ces parties
+        est dans une fonction, ou si main contient encore une longue partie
+        du traitement. Accorde 0 si presque tout le programme est dans main.
+    naming:
+      description: Les noms sont explicites et suivent toujours la même convention
+      max_points: 1
+      prompt: >
+        Accorde 1 si chaque variable et chaque fonction dit ce qu'elle
+        représente et si l'étudiant applique la même convention à tous les
+        noms qu'il a choisis. Les compteurs de boucle i et j sont acceptés.
+        Accorde 0.5 si deux conventions se mélangent dans les noms choisis
+        par l'étudiant, ou si des abréviations ambiguës subsistent (func,
+        tab, val, tmp, a, x pour des données du programme). Accorde 0 si
+        les noms sont cryptiques ou trompeurs.
+    scope:
+      description: La portée des variables est réduite au minimum
+      max_points: 1
+      prompt: >
+        Accorde 1 si les variables sont déclarées au plus près de leur
+        première utilisation (les compteurs dans l'en-tête des for) et s'il
+        n'y a pas de variable globale modifiable. Les constantes globales
+        (const ou #define) sont attendues et ne sont pas pénalisées. Accorde
+        0.5 si les variables sont le plus souvent déclarées en bloc en tête
+        de fonction. Accorde 0 si des variables globales modifiables portent
+        l'état du programme (options, tableau des nombres, compteur).
+    ssot:
+      description: Chaque information n'est écrite qu'à un seul endroit (SSOT)
+      max_points: 1
+      prompt: >
+        Accorde 1 si le nombre maximum de nombres (20) et le code d'erreur
+        (1) apparaissent sous un nom explicite (#define ou constante const)
+        utilisé partout, et si une même logique n'est pas recopiée
+        plusieurs fois (par exemple la boucle qui cherche une option, écrite
+        une seule fois dans une fonction commune). Accorde 0.5 si 20 ou le
+        code d'erreur sont écrits en dur à plusieurs endroits, ou si la
+        recherche d'une option est recopiée dans chacune des trois
+        fonctions. Accorde 0 si les deux défauts sont présents.
